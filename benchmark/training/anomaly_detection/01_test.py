@@ -38,6 +38,10 @@ param = com.yaml_load()
 ########################################################################
 # main 01_test.py
 ########################################################################
+
+import numpy as np
+from tensorflow.keras.models import Model
+
 if __name__ == "__main__":
     # check mode
     # "development": mode == True
@@ -60,7 +64,9 @@ if __name__ == "__main__":
         print("\n===========================")
         print("[{idx}/{total}] {dirname}".format(dirname=target_dir, idx=idx+1, total=len(dirs)))
         machine_type = os.path.split(target_dir)[1]
-
+        
+        
+        print(target_dir)
         print("============== MODEL LOAD ==============")
         # set model path
         model_file = "{model}/model_{machine_type}.hdf5".format(model=param["model_directory"],
@@ -80,6 +86,7 @@ if __name__ == "__main__":
             performance = []
 
         machine_id_list = com.get_machine_id_list_for_test(target_dir)
+        
 
         for id_str in machine_id_list:
             # load test file
@@ -93,6 +100,7 @@ if __name__ == "__main__":
             anomaly_score_list = []
 
             print("\n============== BEGIN TEST FOR A MACHINE ID ==============")
+            
             y_pred = [0. for k in test_files]
             for file_idx, file_path in tqdm(enumerate(test_files), total=len(test_files)):
                 try:
@@ -102,6 +110,9 @@ if __name__ == "__main__":
                                                     n_fft=param["feature"]["n_fft"],
                                                     hop_length=param["feature"]["hop_length"],
                                                     power=param["feature"]["power"])
+            
+                    np.savetxt('input_val/sample_{id_str}_{file_idx}.csv'.format(id_str=id_str,file_idx=file_idx),data,delimiter=",") #save input csv file
+                    
                     pred = model.predict(data)
                     errors = numpy.mean(numpy.square(data - pred), axis=1)
                     y_pred[file_idx] = numpy.mean(errors)
@@ -137,6 +148,20 @@ if __name__ == "__main__":
             csv_lines.append(["Average"] + list(averaged_performance))
             csv_lines.append([])
 
+    
+    layer_outputs = []
+    print(data)
+    for i in range(1, len(model.layers)):
+      tmp_model = Model(model.layers[0].input, model.layers[i].output)
+      tmp_output = tmp_model.predict(data)[0]
+      print(i," : " , tmp_output)
+    
+      layer_outputs.append(tmp_output)
+   
+
+
+    
+    
     if mode:
         # output results
         result_path = "{result}/{file_name}".format(result=param["result_directory"], file_name=param["result_file"])

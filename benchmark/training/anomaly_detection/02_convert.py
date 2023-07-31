@@ -74,7 +74,7 @@ if __name__ == "__main__":
         for i in range(len(model.layers)):
             if skip:
                 skip = False
-                continue
+            #    continue
             if isinstance(model.layers[i], keras.layers.Dense):
                 if i < len(model.layers)-1 and isinstance(model.layers[i+1], keras.layers.BatchNormalization):
                     kernel, bias = model.layers[i].get_weights()
@@ -91,10 +91,12 @@ if __name__ == "__main__":
                         name='folded_bias')
 
                     model.layers[i].set_weights([folded_kernel, folded_bias])
-                    skip = True
-
+                    #skip = False
+                    
             h = model.layers[i](h)
+            
         model = keras.Model(inputs=model.input, outputs=h)
+
         model.summary()
 
         # Convert the model to tflite
@@ -112,8 +114,10 @@ if __name__ == "__main__":
                                                                     machine_type=machine_type)
         with tf.io.gfile.GFile(tflite_file, 'wb') as f:
             f.write(tflite_model)
-
+        
+        
         print("============== DATASET_GENERATOR ==============")
+
         files = com.file_list_generator(target_dir)
         train_data = com.list_to_vector_array(files,
                                           msg="generate train_dataset",
@@ -134,6 +138,7 @@ if __name__ == "__main__":
         tflite_model = converter.convert()
         tflite_file = "{model}/model_{machine_type}_quant_fullint.tflite".format(model=param["model_directory"],
                                                                     machine_type=machine_type)
+        print(tflite_model)
         with tf.io.gfile.GFile(tflite_file, 'wb') as f:
             f.write(tflite_model)
 

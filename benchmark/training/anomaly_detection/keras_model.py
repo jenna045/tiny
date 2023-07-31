@@ -25,44 +25,44 @@ def get_model(inputDim):
     """
     inputLayer = Input(shape=(inputDim,))
 
-    h = Dense(128)(inputLayer)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_1")(inputLayer)
+    h = BatchNormalization(name="Batch_Normalization_1")(h)
     h = Activation('relu')(h)
 
-    h = Dense(128)(h)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_2")(h)
+    h = BatchNormalization(name="Batch_Normalization_2")(h)
     h = Activation('relu')(h)
 
-    h = Dense(128)(h)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_3")(h)
+    h = BatchNormalization(name="Batch_Normalization_3")(h)
     h = Activation('relu')(h)
 
-    h = Dense(128)(h)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_4")(h)
+    h = BatchNormalization(name="Batch_Normalization_4")(h)
     h = Activation('relu')(h)
     
-    h = Dense(8)(h)
-    h = BatchNormalization()(h)
+    h = Dense(8,name="Dense_5")(h)
+    h = BatchNormalization(name="Batch_Normalization_5")(h)
     h = Activation('relu')(h)
 
-    h = Dense(128)(h)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_6")(h)
+    h = BatchNormalization(name="Batch_Normalization_6")(h)
     h = Activation('relu')(h)
 
-    h = Dense(128)(h)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_7")(h)
+    h = BatchNormalization(name="Batch_Normalization_7")(h)
     h = Activation('relu')(h)
 
-    h = Dense(128)(h)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_8")(h)
+    h = BatchNormalization(name="Batch_Normalization_8")(h)
     h = Activation('relu')(h)
 
-    h = Dense(128)(h)
-    h = BatchNormalization()(h)
+    h = Dense(128,name="Dense_9")(h)
+    h = BatchNormalization(name="Batch_Normalization_9")(h)
     h = Activation('relu')(h)
 
     h = Dense(inputDim)(h)
-
+    
     return Model(inputs=inputLayer, outputs=h)
 #########################################################################
 

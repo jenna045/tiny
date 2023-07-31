@@ -191,7 +191,7 @@ if __name__ == "__main__":
                                           n_fft=param["feature"]["n_fft"],
                                           hop_length=param["feature"]["hop_length"],
                                           power=param["feature"]["power"])
-
+        print(train_data.shape)
         # train model
         print("============== MODEL TRAINING ==============")
         model = keras_model.get_model(param["feature"]["n_mels"] * param["feature"]["frames"])
